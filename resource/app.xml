@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+	">
+	<description>netty</description>
+	<bean id="propertyConfigurer" 
+        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"> 
+        <property name="location"> 
+            <value>app.properties</value> 
+        </property> 
+    </bean>
+    <context:component-scan base-package="netty.svc" />
+	<!-- dbcp连接池 -->  
+	<!-- 数据库 -->
+	<!-- 系统数据库 -->
+	<bean id="ds" class="org.apache.commons.dbcp.BasicDataSource" scope="singleton"
+		destroy-method="close"><!-- BasicDataSource提供了close()方法关闭数据源，所以必须设定destroy-method=”close”属性， 以便Spring容器关闭时，数据源能够正常关闭。 -->
+		<property name="driverClassName" value="${db.driver}"/>
+		<property name="url" value="${db.url}" />
+		<property name="username" value="${db.user}"/>
+		<property name="password" value="${db.pass}"/>
+		<!--连接池的最大值--> 
+		<property name="maxActive" value="128" />
+		<!-- 最大空闲值，当经过一个高峰时间后，连接池可以慢慢将已经用不到的链接慢慢释放一部分，一直减少到maxIdle为止 -->
+		<property name="maxIdle" value="8" />
+		<!-- maxWait：最大等待秒数，单位为毫秒， 超过时间会报出错误信息  -->
+		<property name="maxWait" value="60000" />
+		<!-- 是否自我中断 -->
+		<property name="removeAbandoned" value="true" />
+		<!-- 几秒后数据连接会自动断开 -->
+		<property name="removeAbandonedTimeout" value="10" />
+	</bean>
+	<!-- nettygate数据库 -->
+	<bean id="ds_gate" class="org.apache.commons.dbcp.BasicDataSource" scope="singleton"
+		destroy-method="close">
+		<property name="driverClassName" value="${db.gate.driver}"/>
+		<property name="url" value="${db.gate.url}" />
+		<property name="username" value="${db.gate.user}"/>
+		<property name="password" value="${db.gate.pass}"/>
+		<property name="maxActive" value="128" />
+		<property name="maxIdle" value="8" />
+		<property name="maxWait" value="60000" />
+		<property name="removeAbandoned" value="true" />
+		<property name="removeAbandonedTimeout" value="10" />
+	</bean>
+	<!-- 日志数据库 -->
+	<bean id="ds_log" class="org.apache.commons.dbcp.BasicDataSource" scope="singleton"
+		destroy-method="close">
+		<property name="driverClassName" value="${db.log.driver}"/>
+		<property name="url" value="${db.log.url}" />
+		<property name="username" value="${db.log.user}"/>
+		<property name="password" value="${db.log.pass}"/>
+		<property name="maxActive" value="128" />
+		<property name="maxIdle" value="8" />
+		<property name="maxWait" value="60000" />
+		<property name="removeAbandoned" value="true" />
+		<property name="removeAbandonedTimeout" value="10" />
+	</bean>
+</beans>
